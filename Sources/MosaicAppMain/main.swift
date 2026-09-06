@@ -1,0 +1,3 @@
+import MosaicKit
+
+MosaicApp.main()

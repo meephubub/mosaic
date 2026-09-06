@@ -1,0 +1,53 @@
+name: Mosaic
+options:
+  bundleIdPrefix: com.mosaic
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+
+packages:
+  Mosaic:
+    path: .
+
+targets:
+  Mosaic:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/MosaicAppMain
+    dependencies:
+      - package: Mosaic
+        product: MosaicKit
+    info:
+      path: Mosaic/Info.plist
+      properties:
+        CFBundleDisplayName: Mosaic
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        LSApplicationCategoryType: public.app-category.productivity
+        NSHumanReadableCopyright: ""
+  MosaicTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/MosaicKitTests
+    dependencies:
+      - target: Mosaic
+
+schemes:
+  Mosaic:
+    build:
+      targets:
+        Mosaic: all
+        MosaicKit: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - MosaicTests
