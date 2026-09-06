@@ -17,18 +17,19 @@ final class EdgeMonitor {
 
     private let geometry = EdgeGeometry()
     private var monitor: Any?
+    private var localMonitor: Any?
     private var hideTask: Task<Void, Never>?
     private(set) var activeEdge: AssistantEdge = .left
     private(set) var phase: AssistantPhase = .hidden
     private(set) var cursorPoint: CGPoint = .zero
 
     private var screens: [ScreenFrame] {
-        NSScreen.screens.map(ScreenFrame.init(frame:))
+        NSScreen.screens.map { ScreenFrame(frame: $0.frame) }
     }
 
     func start() {
         guard monitor == nil else { return }
-        let handler: (NSEvent) -> Void = { [weak self] event in
+        let handler: (NSEvent) -> Void = { [weak self] _ in
             guard let self else { return }
             let point = NSEvent.mouseLocation
             Task { @MainActor in
@@ -39,13 +40,30 @@ final class EdgeMonitor {
             matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged, .otherMouseDragged],
             handler: handler
         )
+
+        // Global monitors do not receive events delivered to Mosaic itself.
+        // Keep a local monitor for cursor movement over the panel/workspace.
+        localMonitor = NSEvent.addLocalMonitorForEvents(
+            matching: [.mouseMoved, .leftMouseDragged, .rightMouseDragged, .otherMouseDragged]
+        ) { [weak self] event in
+            guard let self else { return event }
+            let point = NSEvent.mouseLocation
+            Task { @MainActor in
+                self.handleCursor(at: point)
+            }
+            return event
+        }
     }
 
     func stop() {
         if let monitor {
             NSEvent.removeMonitor(monitor)
         }
+        if let localMonitor {
+            NSEvent.removeMonitor(localMonitor)
+        }
         monitor = nil
+        localMonitor = nil
     }
 
     /// Tests can drive this directly with synthetic points.
@@ -69,6 +87,7 @@ final class EdgeMonitor {
                 scheduleHide()
             } else {
                 hideTask?.cancel()
+                hideTask = nil
             }
 
         case .hidden:

@@ -60,7 +60,7 @@ final class SlashCommandRegistry {
     func parse(_ input: String) -> (command: SlashCommand, argument: String)? {
         let trimmed = input.trimmingCharacters(in: .whitespaces)
         guard trimmed.hasPrefix("/") else { return nil }
-        let parts = trimmed.dropFirst().split(maxSplits: 1, omittingEmptySubsequences: false)
+        let parts = trimmed.dropFirst().split(separator: " ", maxSplits: 1, omittingEmptySubsequences: false)
         guard let namePart = parts.first else { return nil }
         let lowered = namePart.lowercased()
         guard let command = commands.first(where: { $0.name == lowered }) else { return nil }

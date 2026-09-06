@@ -45,8 +45,5 @@ struct SlashCommandMenu: View {
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .onHover { hovering in
-            if hovering { selectedIndex = index }
-        }
     }
 }

@@ -16,13 +16,13 @@ struct CalendarPage: View {
                 .font(DS.Typography.pageTitle)
 
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    DSSectionHeader(title: "Upcoming deadlines")
-                    if upcomingTasks.isEmpty {
+                DSSectionHeader(title: "Upcoming deadlines")
+                if upcomingTasks.isEmpty {
                         Text("No scheduled tasks yet. Create one with a due date, or ask the assistant.")
                             .font(DS.Typography.chatBody)
                             .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(upcomingTasks, id: \.id) { item in
+                } else {
+                    ForEach(upcomingTasks, id: \.id) { item in
                             HStack {
                                 Text(item.dueDate?.formatted(date: .abbreviated, time: .omitted) ?? "")
                                     .font(DS.Typography.meta)
@@ -32,8 +32,8 @@ struct CalendarPage: View {
                                     .font(DS.Typography.chatBody)
                                 Spacer()
                             }
-                        }
                     }
+                }
             }
             .dsCard()
 

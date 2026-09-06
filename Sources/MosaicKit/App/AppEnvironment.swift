@@ -8,10 +8,10 @@ import Observation
 @Observable
 final class AppEnvironment {
     let services: AppServices
-    let floatingAssistant: FloatingAssistantController
+    var floatingAssistant: FloatingAssistantController
     let navigator: WorkspaceNavigator
 
-    private var assistantTask: Task<Void, Never>?
+
 
     public init() {
         let persistence = PersistenceController()
@@ -40,14 +40,7 @@ final class AppEnvironment {
 
     /// Starts global cursor monitoring once the app is running.
     func start() {
-        guard assistantTask == nil else { return }
         floatingAssistant.startMonitoring()
-        assistantTask = Task { [floatingAssistant] in
-            for await state in floatingAssistant.stateStream {
-                // Observability hook for future side effects (analytics, etc.).
-                _ = state
-            }
-        }
     }
 }
 

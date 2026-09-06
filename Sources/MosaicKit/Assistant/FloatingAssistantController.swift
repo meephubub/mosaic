@@ -24,21 +24,12 @@ final class FloatingAssistantController {
     private let monitor: EdgeMonitor
     private let services: AppServices
 
-    private var stateContinuation: AsyncStream<AssistantPhase>.Continuation?
-    lazy var stateStream: AsyncStream<AssistantPhase> = {
-        AsyncStream { continuation in
-            stateContinuation = continuation
-            continuation.yield(phase)
-        }
-    }()
-
     private static let notchSize = NSSize(width: 90, height: 120)
     private static let chatSize = NSSize(width: 400, height: 540)
 
     init(services: AppServices, navigator: WorkspaceNavigator) {
         self.services = services
-        let screenFrame = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
-        let panel = FloatingAssistantPanel(contentRect: NSRect(origin: .zero, size: notchSize))
+        let panel = FloatingAssistantPanel(contentRect: NSRect(origin: .zero, size: Self.notchSize))
         self.panel = panel
         self.monitor = EdgeMonitor()
 
@@ -106,7 +97,6 @@ final class FloatingAssistantController {
     private func setPhase(_ newPhase: AssistantPhase, fromMonitor: Bool) {
         guard phase != newPhase else { return }
         phase = newPhase
-        stateContinuation?.yield(phase)
         layoutPanel()
     }
 

@@ -55,6 +55,7 @@ final class ConversationService {
         }
     }
 
+    @discardableResult
     func append(
         text: String,
         role: MessageRole,

@@ -88,7 +88,7 @@ final class ChatController {
 
     private func runSlashCommand(_ command: SlashCommand, argument: String, echo: String) {
         appendVisible(ChatMessage(text: echo, role: .user))
-        conversationService.append(text: echo, role: .user, to: conversation)
+        _ = conversationService.append(text: echo, role: .user, to: conversation)
         guard let handler = slashRegistry.handler(for: command) else { return }
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -156,13 +156,6 @@ final class ChatController {
         let chunks = pendingChunks
         pendingChunks.removeAll()
 
-        if ProcessInfo.processInfo.reduceMotionEnabled {
-            for chunk in chunks {
-                appendVisible(ChatMessage(text: chunk, role: .assistant))
-            }
-            return
-        }
-
         sequencerTask?.cancel()
         sequencerTask = Task { @MainActor [weak self] in
             for (index, chunk) in chunks.enumerated() {
@@ -181,7 +174,7 @@ final class ChatController {
                 try? await Task.sleep(for: .milliseconds(320))
             }
             appendVisible(ChatMessage(text: message, role: .assistant))
-            conversationService.append(text: message, role: .assistant, to: conversation)
+            _ = conversationService.append(text: message, role: .assistant, to: conversation)
         }
     }
 

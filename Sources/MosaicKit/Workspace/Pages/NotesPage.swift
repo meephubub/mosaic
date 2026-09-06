@@ -43,7 +43,10 @@ struct NotesPage: View {
     private var noteList: some View {
         List(selection: $selectedID) {
             ForEach(visibleNotes, id: \.id) { note in
-                NavigationLink(value: note.id) {
+                Button {
+                    selectedID = note.id
+                    navigator.selectedNoteID = note.id
+                } label: {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(note.title)
                             .font(DS.Typography.cardTitle)
@@ -51,13 +54,17 @@ struct NotesPage: View {
                             .font(DS.Typography.meta)
                             .foregroundStyle(.secondary)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
+                .buttonStyle(.plain)
                 .tag(note.id)
             }
-            .onDelete { indexSet in
-                for index in indexSet {
-                    if index < visibleNotes.count {
-                        noteService.delete(visibleNotes[index])
+            .contextMenu {
+                if let id = selectedID,
+                   let note = noteService.findByID(id) {
+                    Button("Delete", role: .destructive) {
+                        noteService.delete(note)
+                        selectedID = nil
                     }
                 }
             }
