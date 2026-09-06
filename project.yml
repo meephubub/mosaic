@@ -37,14 +37,14 @@ targets:
     sources:
       - path: Tests/MosaicKitTests
     dependencies:
-      - target: Mosaic
+      - package: Mosaic
+        product: MosaicKit
 
 schemes:
   Mosaic:
     build:
       targets:
         Mosaic: all
-        MosaicKit: all
     run:
       config: Debug
     test:
