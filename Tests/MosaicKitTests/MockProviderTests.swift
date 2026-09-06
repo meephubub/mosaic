@@ -42,6 +42,9 @@ final class MockProviderTests: XCTestCase {
 
     func testStreamFinishes() async throws {
         let events = try await collectEvents("anything at all")
-        XCTAssertTrue(events.contains(.finished))
+        XCTAssertTrue(events.contains { event in
+            if case .finished = event { return true }
+            return false
+        })
     }
 }

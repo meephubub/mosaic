@@ -57,8 +57,8 @@ final class SlashCommandTests: XCTestCase {
     func testTaskHandlerCreatesTask() async {
         let handler = TaskCommandHandler(taskService: services.taskService)
         let outcome = await handler.execute(argument: "Revise cell biology tomorrow")
-        guard case .handledLocally(let message) = outcome else {
-            return XCTFail("Expected handledLocally")
+        guard case .handledLocally(let message?) = outcome else {
+            return XCTFail("Expected handledLocally message")
         }
         XCTAssertTrue(message.contains("cell biology"))
         XCTAssertEqual(services.taskService.tasks.count, 1)
@@ -87,8 +87,8 @@ final class SlashCommandTests: XCTestCase {
         services.noteService.create(title: "Chemistry — bonding", content: "ionic vs covalent")
         let handler = SearchCommandHandler(noteService: services.noteService)
         let outcome = await handler.execute(argument: "chemistry")
-        guard case .handledLocally(let message) = outcome else {
-            return XCTFail("Expected handledLocally")
+        guard case .handledLocally(let message?) = outcome else {
+            return XCTFail("Expected handledLocally message")
         }
         XCTAssertTrue(message.contains("Chemistry — bonding"))
     }
@@ -96,8 +96,8 @@ final class SlashCommandTests: XCTestCase {
     func testHelpHandlerListsCommands() async {
         let handler = HelpCommandHandler(registry: registry)
         let outcome = await handler.execute(argument: "")
-        guard case .handledLocally(let message) = outcome else {
-            return XCTFail("Expected handledLocally")
+        guard case .handledLocally(let message?) = outcome else {
+            return XCTFail("Expected handledLocally message")
         }
         XCTAssertTrue(message.contains("/task"))
         XCTAssertTrue(message.contains("/note"))

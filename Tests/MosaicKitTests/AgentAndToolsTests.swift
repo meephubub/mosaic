@@ -128,7 +128,10 @@ final class AgentAndToolsTests: XCTestCase {
         XCTAssertTrue(events.contains { if case .toolFinished = $0 { return true } else { return false } })
         XCTAssertEqual(taskService.tasks.count, 1)
         XCTAssertEqual(taskService.tasks.first?.title, "Agent task")
-        XCTAssertTrue(events.contains(.finished))
+        XCTAssertTrue(events.contains { event in
+            if case .finished = event { return true }
+            return false
+        })
     }
 
     func testAgentWithoutToolCallFinishesQuickly() async throws {
@@ -149,7 +152,7 @@ final class AgentAndToolsTests: XCTestCase {
 
     func testConversationPersistsMessages() async throws {
         let repository = ConversationRepository(container: persistence.container)
-        let conversation = repository.mostRecent() ?? ConversationModel()
+        let conversation = try repository.mostRecent() ?? ConversationModel()
         if conversation.messages.isEmpty {
             try repository.insert(conversation)
         }
