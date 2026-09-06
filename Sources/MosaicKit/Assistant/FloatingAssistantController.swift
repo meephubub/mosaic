@@ -1,5 +1,6 @@
 import AppKit
 import SwiftUI
+import Observation
 import Combine
 
 /// Owns the floating panel: monitors the cursor, sizes/positions the window

@@ -15,8 +15,7 @@ struct CalendarPage: View {
             Text("Calendar")
                 .font(DS.Typography.pageTitle)
 
-            DSCard {
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     DSSectionHeader(title: "Upcoming deadlines")
                     if upcomingTasks.isEmpty {
                         Text("No scheduled tasks yet. Create one with a due date, or ask the assistant.")
@@ -35,8 +34,8 @@ struct CalendarPage: View {
                             }
                         }
                     }
-                }
             }
+            .dsCard()
 
             Text("Month and week views arrive in a later phase.")
                 .font(DS.Typography.meta)

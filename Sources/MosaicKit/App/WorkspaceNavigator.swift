@@ -1,4 +1,5 @@
 import SwiftUI
+import Observation
 
 /// The workspace's section identifiers.
 enum WorkspaceSection: String, CaseIterable, Identifiable, Hashable {

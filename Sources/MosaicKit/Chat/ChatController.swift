@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Observation
 
 /// Drives a chat surface (floating panel or workspace AI page): owns the
 /// visible messages, thinking state, slash command suggestions, and agent runs.

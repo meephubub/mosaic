@@ -10,8 +10,7 @@ struct RevisionPage: View {
             Text("Revision")
                 .font(DS.Typography.pageTitle)
 
-            DSCard {
-                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                     Label("Coming soon", systemImage: "brain.head.profile")
                         .font(DS.Typography.cardTitle)
                     Text(
@@ -20,8 +19,8 @@ struct RevisionPage: View {
                     )
                     .font(DS.Typography.chatBody)
                     .foregroundStyle(.secondary)
-                }
             }
+            .dsCard()
 
             Spacer()
         }

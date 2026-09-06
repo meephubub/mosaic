@@ -13,14 +13,25 @@ struct TaskRepository {
     }
 
     func fetchAll() throws -> [TodoItem] {
-        let descriptor = FetchDescriptor<TodoItem>(
-            sortBy: [
-                SortDescriptor(\.isCompleted),
-                SortDescriptor(\.dueDate),
-                SortDescriptor(\.createdAt)
-            ]
-        )
-        return try context.fetch(descriptor)
+        // Sort in memory: Bool and Optional<Date> do not have the Foundation
+        // SortDescriptor initializers available for SwiftData fetches.
+        let items = try context.fetch(FetchDescriptor<TodoItem>())
+        return items.sorted { lhs, rhs in
+            if lhs.isCompleted != rhs.isCompleted {
+                return !lhs.isCompleted
+            }
+            switch (lhs.dueDate, rhs.dueDate) {
+            case let (left?, right?):
+                if left != right { return left < right }
+            case (_?, nil):
+                return true
+            case (nil, _?):
+                return false
+            default:
+                break
+            }
+            return lhs.createdAt > rhs.createdAt
+        }
     }
 
     func fetchToday() throws -> [TodoItem] {

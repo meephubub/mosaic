@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import Observation
 
 /// Logging helper so services can report errors without UIKit-style alerts.
 enum MosaicLog {

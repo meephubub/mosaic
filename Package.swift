@@ -10,6 +10,7 @@ let package = Package(
         .library(name: "MosaicKit", targets: ["MosaicKit"]),
         .executable(name: "Mosaic", targets: ["MosaicMain"])
     ],
+    swiftLanguageModes: [.v5],
     targets: [
         .target(name: "MosaicKit", path: "Sources/MosaicKit"),
         .executableTarget(

@@ -1,4 +1,5 @@
 import SwiftUI
+import Observation
 
 /// The composition root. Owns every service instance and hands them out to
 /// both the floating assistant and the workspace window so the two interfaces

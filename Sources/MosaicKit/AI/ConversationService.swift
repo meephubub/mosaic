@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 import SwiftData
 
 /// Orchestrates a chat conversation: builds context, invokes the agent, and

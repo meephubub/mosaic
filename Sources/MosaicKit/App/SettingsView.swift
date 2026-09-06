@@ -2,8 +2,6 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppEnvironment.self) private var environment
-    @Environment(\.appServices) private var services
-
     var body: some View {
         Form {
             Section("Assistant") {

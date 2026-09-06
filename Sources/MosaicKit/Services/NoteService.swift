@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import Observation
 
 /// The single writer for note state, shared by the Notes UI and the AI tools.
 @MainActor
@@ -60,8 +61,8 @@ final class NoteService {
     }
 
     func delete(_ note: NoteModel) {
+        repository.context.delete(note)
         do {
-            try repository.context.delete(note)
             try repository.save()
         } catch {
             MosaicLog.error("NoteService.delete failed: \(error)")
