@@ -23,14 +23,16 @@ enum RelativeDateParser {
             break
         }
 
-        if lowered.hasPrefix("in "),
-           let count = Int(lowered.dropFirst(3).trimmingCharacters(in: CharacterSet(charactersIn: "1234567890").inverted).prefix { $0.isNumber }),
+        let relativeParts = lowered.split(whereSeparator: { $0.isWhitespace })
+        if relativeParts.count >= 3,
+           relativeParts[0] == "in",
+           let count = Int(relativeParts[1]),
            count > 0 {
-            let remainder = lowered.dropFirst(3).drop { $0.isNumber }
-            if remainder.hasPrefix("day") {
+            let unit = relativeParts[2]
+            if unit.hasPrefix("day") {
                 return calendar.date(byAdding: .day, value: count, to: today)
             }
-            if remainder.hasPrefix("week") {
+            if unit.hasPrefix("week") {
                 return calendar.date(byAdding: .day, value: count * 7, to: today)
             }
         }

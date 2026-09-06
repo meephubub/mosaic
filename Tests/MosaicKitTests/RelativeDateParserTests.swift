@@ -41,6 +41,15 @@ final class RelativeDateParserTests: XCTestCase {
         XCTAssertEqual(days, 3)
     }
 
+    func testInWeeks() {
+        let parsed = RelativeDateParser.parse("in 2 weeks")
+        XCTAssertNotNil(parsed)
+        let days = Calendar.current.dateComponents(
+            [.day], from: Calendar.current.startOfDay(for: .now), to: Calendar.current.startOfDay(for: parsed!)
+        ).day
+        XCTAssertEqual(days, 14)
+    }
+
     func testUnknownPhraseReturnsNil() {
         XCTAssertNil(RelativeDateParser.parse("someday maybe"))
     }
